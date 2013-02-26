@@ -2,60 +2,35 @@ require 'spec_helper'
 
 describe "Static Pages" do
 
-	let(:base_title) {"A New Twitter"}
-	let(:hone) {"Should have the h1"}
-	let(:tit) {"Should have the title"}
+	subject { page }
 
-	describe "Home page" do |hone, tit|
+	describe "Home page" do
+		before { visit root_path }
 
-		it "#{hone} 'Twitter Clone'" do
-			visit '/static_pages/home'
-			page.should have_selector('h1', :text => 'Twitter Clone')
-		end
+		it { should have_selector('h1', text: 'Twitter Clone') }
+		it { should have_selector('title', text: full_title('Home')) }
 
-		it "#{tit} 'Home'" do
-			visit '/static_pages/home'
-			page.should have_selector('title', :text => "#{base_title} | Home")
-		end
 	end
 
-		describe "Help" do |hone, tit|
+		describe "Help" do
+			before { visit help_path }
 
-		it "#{hone} Help'" do
-			visit '/static_pages/help'
-			page.should have_selector('h1', :text => 'Help')
-		end
-
-		it "#{tit} 'Help'" do
-			visit '/static_pages/help'
-			page.should have_selector('title', :text => "#{base_title} | Help")
-		end
+		it { should have_selector('h1', text: 'Help') }
+		it { should have_selector('title', text: full_title('Help')) }
 	end
 
-		describe "About" do |hone, tit|
+		describe "About" do
+			before { visit about_path }
 
-		it "#{hone} 'About'" do
-			visit '/static_pages/about'
-			page.should have_selector('h1', :text => 'About')
-		end
-
-		it "#{tit} 'About'" do
-			visit '/static_pages/about'
-			page.should have_selector('title', :text => "#{base_title} | About")
-		end
+		it { should have_selector('h1', text: 'About') }
+		it { should have_selector('title', text: full_title('About')) }
 	end
 
-		describe "Contact Us" do |hone, tit|
+		describe "Contact Us" do
+			before { visit contact_path }
 
-		it "#{hone} Contact Us'" do
-			visit '/static_pages/contact'
-			page.should have_selector('h1', :text => 'Contact Us')
-		end
-
-		it "#{tit} 'Contact Us'" do
-			visit '/static_pages/contact'
-			page.should have_selector('title', :text => "#{base_title} | Contact Us")
-		end
+		it { should have_selector('h1', text: 'Contact Us') }
+		it { should have_selector('title', text: full_title('Contact Us')) }
 	end
 
 end
