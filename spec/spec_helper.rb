@@ -19,6 +19,9 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
   config.include Rails.application.routes.url_helpers
+  config.include PageElements
+  config.include FlashMessages
+  config.include AuthenticationHelpers
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
