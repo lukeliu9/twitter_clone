@@ -12,4 +12,10 @@ module FlashMessages
 		end
 	end
 
+	RSpec::Matchers.define :have_success_message do
+		match do |page|
+			page.should have_selector('div.alert.alert-success')
+		end
+	end
+
 end

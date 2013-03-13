@@ -22,6 +22,7 @@ RSpec.configure do |config|
   config.include PageElements
   config.include FlashMessages
   config.include AuthenticationHelpers
+  config.include UserPages
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
