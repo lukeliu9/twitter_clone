@@ -45,12 +45,39 @@ subject { page }
 				it { should have_link('Sign in') }
 			end
 		end
+
+		describe "signed in and trying to access new action" do
+			let(:user) { FactoryGirl.create(:user) }
+			before do
+				sign_in user
+				visit signin_path
+			end
+
+			it { have_selector('title', 'Home') }
+		end
+
+		describe "signed in and trying to access create action" do
+			let!(:user) { FactoryGirl.create(:user) }
+
+			before do 
+				sign_in user
+				visit signup_path 
+			end
+
+			it { have_selector('title', 'Home') }
+		end
+
 	end
 
 	describe "Authorization" do
 
 		describe "for non-signed-in users" do
 			let(:user) { FactoryGirl.create(:user) }
+
+			it { should_not have_link('Users', href: users_path) }
+			it { should_not have_link('Profile', href: user_path(user)) }
+			it { should_not have_link('Settings', href: edit_user_path(user)) }
+			it { should_not have_link('Sign out', href: signout_path) }	
 
 			describe "in the Users controller" do
 
@@ -80,9 +107,11 @@ subject { page }
 				end
 
 				describe "after signing in" do
+
 					it "should render the desired protected page" do
 						have_selector('title', 'Edit user')
 					end
+
 				end
 			end
 
@@ -97,6 +126,7 @@ subject { page }
 					specify { response.should redirect_to(root_path) }
 				end
 			end
+
 		end
 
 		describe "as wrong user" do
@@ -113,6 +143,17 @@ subject { page }
 				before { put user_path(wrong_user) }
 				specify { response.should redirect_to(root_path) }
 			end
+		end
+
+		describe "destroy" do
+		    let!(:admin) { FactoryGirl.create(:admin) }
+
+		    before { sign_in admin }
+
+		    it "should not allow the admin to delete herself" do
+		    	expect { delete user_path(admin) }.not_to change(User, :count)
+		      
+		    end
 		end
 	end
 end
