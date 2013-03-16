@@ -24,7 +24,6 @@ subject { page }
 				before { click_link "Home" } #referring to the actual link text in the header
 				it { not_have_error }
 			end
-
 		end
 
 		describe "with valid information" do
@@ -127,6 +126,22 @@ subject { page }
 				end
 			end
 
+			describe "in the microposts controller" do
+
+				describe "submitting to the create action" do
+					before { post microposts_path }
+					specify { response.should redirect_to(signin_path) }
+				end
+
+				describe "submitting to the destroy action" do
+					before do
+						micropost = FactoryGirl.create(:micropost)
+						delete micropost_path(micropost)
+					end
+					specify { response.should redirect_to(signin_path) }
+				end
+			end
+
 		end
 
 		describe "as wrong user" do
@@ -152,7 +167,6 @@ subject { page }
 
 		    it "should not allow the admin to delete herself" do
 		    	expect { delete user_path(admin) }.not_to change(User, :count)
-		      
 		    end
 		end
 	end
