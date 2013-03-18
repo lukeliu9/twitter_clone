@@ -12,26 +12,39 @@ describe "Static Pages" do
 		describe "Home page" do
 			before { visit root_path }
 
-		let(:heading) {'Twitter Clone'}
-		let(:page_title) {''}
-		it_should_behave_like "all static pages"
+			let(:heading) {'Twitter Clone'}
+			let(:page_title) {''}
+			it_should_behave_like "all static pages"
 
-		describe "for signed-in users" do
-			let(:user) { FactoryGirl.create(:user) }
-			before do
-				FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
-				FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
-				sign_in user
-				visit root_path
-			end
-			it "should render the user's feed" do
-				user.feed.each do |post|
-					page.should have_selector("li##{post.id}", text: post.content)
+			describe "for signed-in users" do
+				let(:user) { FactoryGirl.create(:user) }
+				before do
+					FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+					FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
+					sign_in user
+					visit root_path
 				end
-			end
-		end
+				it "should render the user's feed" do
+					user.feed.each do |post|
+						page.should have_selector("li##{post.id}", text: post.content)
+					end
+				end
 
-	end
+				describe "follower/following counts" do
+					let(:other_user) { FactoryGirl.create(:user) }
+					before do
+						other_user.follow!(user)
+						visit root_path
+					end
+
+					it { should have_link("0 following", href: following_user_path(user)) }
+					it { should have_link("1 follower", href: followers_user_path(user)) }
+
+				end
+
+			end
+
+		end
 
 		describe "Help" do
 			before { visit help_path }
